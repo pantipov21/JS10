@@ -22,20 +22,14 @@ for (const product of products){
 		const picture = product.getElementsByClassName('product__image')[0].getAttribute('src');
 		const id = product.dataset.id;
 		const cart = document.getElementsByClassName('cart__products')[0];
-		let cartProducts = null;
-		if (cart.children.length>0){
-			cartProducts = Array.from(cart.getElementsByClassName('cart__product'));
-		}
+		const cartProducts = Array.from(cart.getElementsByClassName('cart__product'));
 		
 		
-		let isExists = false;
 		let quantityTotal = Number(quantity.innerText);
-		if (cartProducts != null){
-			isExists = cartProducts.find(item => item.dataset.id == product.dataset.id);
-			if (isExists != undefined){
-				isExists.lastElementChild.innerText = quantityTotal + Number(isExists.lastElementChild.innerText);
-				return true;
-			}
+		const isExists = cartProducts.find(item => item.dataset.id == product.dataset.id);
+		if (isExists != undefined){
+			isExists.lastElementChild.innerText = quantityTotal + Number(isExists.lastElementChild.innerText);
+			return true;
 		}
 		
 		const html = `
