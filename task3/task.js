@@ -1,6 +1,7 @@
 const products = document.getElementsByClassName('product');
 
 for (const product of products){
+	//назначаем обработчики на изменение количества данного продукта
 	const decQuantity = product.getElementsByClassName('product__quantity-controls')[0].firstElementChild;
 	const quantity = decQuantity.nextElementSibling;
 	const incQuantity = decQuantity.nextElementSibling.nextElementSibling;
@@ -18,34 +19,32 @@ for (const product of products){
 	const productAdd = product.getElementsByClassName('product__add')[0];
 	
 	productAdd.onclick = () => {
+		const picture = product.getElementsByClassName('product__image')[0].getAttribute('src');
+		const id = product.dataset.id;
 		const cart = document.getElementsByClassName('cart__products')[0];
-		const cartContent = cart.getElementsByClassName('cart__product');
+		let cartProducts = null;
+		if (cart.children.length>0){
+			cartProducts = Array.from(cart.getElementsByClassName('cart__product'));
+		}
+		
 		
 		let isExists = false;
-		if (cartContent.length > 0){
-			for (let i = 0; i < cartContent.length; i++){
-				if (cartContent[i].getAttribute('data-id') == product.getAttribute('data-id')){
-					cartContent[i].getElementsByClassName('cart__product-count')[0].innerText = Number(quantity.innerText) + Number(cartContent[i].getElementsByClassName('cart__product-count')[0].innerText);
-					isExists= true;
-					break;
-				}
+		let quantityTotal = Number(quantity.innerText);
+		if (cartProducts != null){
+			isExists = cartProducts.find(item => item.dataset.id == product.dataset.id);
+			if (isExists != undefined){
+				isExists.lastElementChild.innerText = quantityTotal + Number(isExists.lastElementChild.innerText);
+				return true;
 			}
 		}
 		
-		if (isExists==false)
-		{
-			const elem = document.createElement('div');
-			elem.setAttribute('class','cart__product');
-			elem.setAttribute('data-id',product.getAttribute('data-id'));
-						
-			const productPicture = product.getElementsByClassName('product__image')[0];
-			
-			let html = `
-			<img class="cart__product-image" src=`+productPicture.getAttribute('src')+`>
-			<div class="cart__product-count">`+quantity.innerText+`</div>`;
-				
-			elem.insertAdjacentHTML('afterbegin',html);
-			cart.insertAdjacentElement('beforeend', elem);
-		}
+		const html = `
+			<div class="cart__product" data-id="${id}">
+			    <img class="cart__product-image" src="${picture}">
+			    <div class="cart__product-count">${quantityTotal}</div>
+			</div>		
+		`;
+			    
+		cart.insertAdjacentHTML('beforeend', html);
 	}
 }

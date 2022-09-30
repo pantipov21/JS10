@@ -2,45 +2,28 @@ const taskInput = document.getElementById('task__input');
 const buttonAdd = document.getElementById('tasks__add');
 const taskList = document.getElementById('tasks__list');
 
-
-function addTask(){
+buttonAdd.onclick = () => {
 	if (taskInput.value.length == 0){
 		return false;
 	}
-	//добавить задание
-	const task = document.createElement('div');
-	task.setAttribute('class','task');
 	
-	const taskTitle = document.createElement('div');
-	taskTitle.setAttribute('class','task__title');
-	taskTitle.innerText=taskInput.value;
-	
-	const taskRemove = document.createElement('a');
-	taskRemove.setAttribute('href','#');
-	taskRemove.setAttribute('class','task__remove');
-	taskRemove.innerHTML='&times;';
-	
-	task.insertAdjacentElement('afterbegin',taskRemove);
-	task.insertAdjacentElement('afterbegin',taskTitle);
+	//добавить задание шаблонной строкой. Так действительно удобнее и нагляднее!:-)
+	let html = `
+	<div class="task">
+		<div class="task__title">${taskInput.value}</div>
+		<a href="#" class="task__remove">&times;</a>
+	</div>
+	`;
 		
-	taskList.insertAdjacentElement('afterbegin',task);
-	
 	taskInput.value = '';
-	
+		
+	taskList.insertAdjacentHTML('afterbegin',html);
+
+	const taskRemove = taskList.getElementsByClassName('task')[0];
 	taskRemove.onclick = () => {
-		taskRemove.parentElement.remove();
+		taskRemove.remove();
 		return false;
 	}
-	
-	return true;
-}
 
-buttonAdd.onclick = (e) => {
-	addTask();
+	return false;
 }
-
-taskInput.onkeydown = (e) => {
-	if (e.code === 'Enter'){
-		addTask();
-	}
-};
