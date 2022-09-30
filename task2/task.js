@@ -3,7 +3,8 @@ const buttonAdd = document.getElementById('tasks__add');
 const taskList = document.getElementById('tasks__list');
 
 buttonAdd.onclick = () => {
-	if (taskInput.value.length == 0){
+	
+	if (taskInput.value.trim().length == 0){
 		return false;
 	}
 	
